@@ -1,18 +1,18 @@
 #include <cstdio>
+#include <fstream>
+#include <sstream>
 #include <stack>
+#include <string>
 
-int main(int argc, char** argv) {
-    const char* code_ptr = NULL;
+void interpret(const char* code_ptr) {
+    if (code_ptr == NULL) {
+        return;
+    }
+
     size_t buffer_size = 30000;
     char* buffer = NULL;
     int  buffer_ptr = 0;
     std::stack<const char*> brackets;
-
-    if (argc <= 1) {
-        printf("Usage: bf code\n");
-    } else if (argc == 2) {
-        code_ptr = argv[1];
-    }
 
     buffer = new char[buffer_size];
     for (size_t i = 0; i < buffer_size; ++i) {
@@ -72,6 +72,31 @@ int main(int argc, char** argv) {
     }
 
     delete[] buffer;
+}
+
+int main(int argc, char** argv) {
+    std::string code_str = "";
+    if (argc <= 1) {
+        printf("usage: bf [-c code | -f source]\n");
+    } else if (argc == 2) { 
+        code_str = argv[1];
+    } else if (argc == 3) {
+        if (strcmp(argv[1], "-c") == 0) {
+            code_str = argv[2];
+        } else if (strcmp(argv[1], "-f") == 0) {
+            std::ifstream infile(argv[2]);
+            std::stringstream ss;
+            char c;
+            while (infile.get(c)) {
+                ss << c;
+            }
+            code_str = ss.str();
+        } else {
+            printf("usage: bf [-c code | -f source]\n");
+        }
+    }
+
+    interpret(code_str.c_str());
 
     return 0;
 }
