@@ -3,7 +3,7 @@
 
 int main(int argc, char** argv) {
     const char* code_ptr = NULL;
-    size_t buffer_size = 10000;
+    size_t buffer_size = 30000;
     char* buffer = NULL;
     int  buffer_ptr = 0;
     std::stack<const char*> brackets;
@@ -22,11 +22,10 @@ int main(int argc, char** argv) {
     while (*code_ptr != '\0') {
         switch (*code_ptr) {
             case '>':
-                buffer_ptr = (buffer_ptr + 1) % buffer_size;
+                ++buffer_ptr;
                 break;
             case '<':
                 --buffer_ptr;
-                buffer_ptr = buffer_ptr < 0 ? buffer_size - 1 : buffer_ptr;
                 break;
             case '+':
                 ++buffer[buffer_ptr];
